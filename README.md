@@ -13,7 +13,7 @@ Working on cleaning and uploading code and instructions for:
 
 More details of experiments run with this code can be found in the [our paper](https://arxiv.org/abs/2010.02986).
 
-If you use this code please cite our paper:
+If you use this code please cite:
 
 ```
 @InProceedings{emnlp20compositional,
@@ -35,6 +35,17 @@ python find_self_statements.py --type location
 python find_self_statements.py --type religion
 python find_self_statements.py --type age
 ```
+
+After running this for location, you will have files for locations in the demographic folder. You can then run compose/resolve_locations.py to resolve locations to the following set, which was based on the amount of available data for each region:
+1. USA
+2. Asia
+3. Oceania
+4. United Kingdom
+5. Europe
+6. Africa
+7. Mexico
+8. South America
+9. Canada
 
 ### Preprocessing
 1. Put the speaker names for speakers of interest in top_speakers.
