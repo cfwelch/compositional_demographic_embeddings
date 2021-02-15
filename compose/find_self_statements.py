@@ -14,8 +14,10 @@ from collections import defaultdict
 from stanfordnlp.server import CoreNLPClient
 from argparse import ArgumentParser
 
-DIR_LOC = ''
-DIR_SET = ['2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015']
+sys.path.append('..')
+from utils import DIR_SET
+
+DIR_LOC = '../data/'
 
 def main():
     parser = ArgumentParser()
@@ -49,7 +51,7 @@ def main():
 def plot_intersection():
     users = defaultdict(lambda: {})
     ppl_dict = defaultdict(lambda: [])
-    with open('../demographic/intersect_set_manual') as handle: #_manual
+    with open('../demographic/intersect_set') as handle: #_manual
         for line in handle.readlines():
             tline = line.strip().split('\t')
 
@@ -168,7 +170,7 @@ def find_intersection():
 
     # open location files
     print('Reading location files...')
-    location_files = [file for file in os.listdir('demographic') if file.startswith('locations_')]
+    location_files = [file for file in os.listdir('../demographic') if file.startswith('locations_')]
     for file in location_files:
         with open('../demographic/' + file) as handle:
             for line in handle.readlines():
@@ -179,7 +181,7 @@ def find_intersection():
 
     # open religion files
     print('Reading religion files...')
-    religion_files = [file for file in os.listdir('demographic') if file.startswith('religions_')]
+    religion_files = [file for file in os.listdir('../demographic') if file.startswith('religions_')]
     for file in religion_files:
         with open('../demographic/' + file) as handle:
             for line in handle.readlines():
@@ -190,7 +192,7 @@ def find_intersection():
 
     # open ages files
     print('Reading age files...')
-    age_files = [file for file in os.listdir('demographic') if file.startswith('ages_')]
+    age_files = [file for file in os.listdir('../demographic') if file.startswith('ages_')]
     for file in age_files:
         with open('../demographic/' + file) as handle:
             for line in handle.readlines():
@@ -201,26 +203,24 @@ def find_intersection():
 
     # open gender files
     print('Reading gender files...')
-    with open('../demographic/females_all') as handle:
+    with open('../demographic/gender_list') as handle:
         for line in handle.readlines():
-            tline = line.strip()
-            if tline == '[deleted]':
+            tline = line.strip().split('\t')
+            if tline[0] == '[deleted]':
                 continue
-            users[tline]['gender'] = 'female'
-
-    with open('../demographic/males_all') as handle:
-        for line in handle.readlines():
-            tline = line.strip()
-            if tline == '[deleted]':
-                continue
-            users[tline]['gender'] = 'male'
-
-    with open('../demographic/both_all') as handle:
-        for line in handle.readlines():
-            tline = line.strip()
-            if tline == '[deleted]':
-                continue
-            users[tline]['gender'] = 'both'
+            
+            if 'gender' in users[tline[0]]:
+                # print(users[tline[0]]['gender'] + ' + ' + tline[1])
+                if users[tline[0]]['gender'] == 'both':
+                    pass
+                elif users[tline[0]]['gender'] == 'male':
+                    if tline[1] == 'female':
+                        users[tline[0]]['gender'] = 'both'
+                elif users[tline[0]]['gender'] == 'female':
+                    if tline[1] == 'male':
+                        users[tline[0]]['gender'] = 'both'
+            else:
+                users[tline[0]]['gender'] = tline[1]
 
     # print stats
     print('Number of users with gender: ' + '{:,}'.format(len([i for i in users if 'gender' in users[i]])))
@@ -234,10 +234,13 @@ def find_intersection():
 
     # ppl_all has counts of posts per user except if count is one -- cuts file size
     pdict = defaultdict(lambda: 1)
-    with open('../demographic/ppl_all') as handle:
-        for line in handle.readlines():
-            tline = line.strip().split(': ')
-            pdict[tline[0]] = int(tline[1])
+    if os.path.exists('../demographic/ppl_all'):
+        with open('../demographic/ppl_all') as handle:
+            for line in handle.readlines():
+                tline = line.strip().split(': ')
+                pdict[tline[0]] = int(tline[1])
+    else:
+        print('Warning! Cannot gather post counts until count_people.py is run which requires preprocessing. This can be run again after preprocessing to get post counts. This run will treat each post count as a value of 1.')
 
     i_dist = [pdict[i] for i in inter_set]
     i_dist.sort()

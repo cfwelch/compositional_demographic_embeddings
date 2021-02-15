@@ -5,9 +5,9 @@ from tqdm import tqdm
 from termcolor import colored
 from collections import defaultdict
 
-DATA_DIR = ''
+DATA_DIR = '../data/2014/'
 CUTOFF = 1000
-FILE_TO_USE = '/2011/RC_2011-05'
+FILE_TO_USE = 'RC_SAMPLE_DATA'
 
 def main():
     # get_sample()
