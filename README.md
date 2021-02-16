@@ -7,7 +7,7 @@ Working on cleaning and uploading code and instructions for:
 - [ ] Model training
 - [ ] Analysis
 
-**Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder.
+**Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder. These files contain fake authors with single letter names in `[a-z]`.
 
 ## Publication
 
@@ -48,8 +48,8 @@ After running this for location, you will have files for locations in the demogr
 9. Canada
 
 ### Preprocessing
-1. Put the speaker names for speakers of interest in top_speakers.
-2. Run get_ts_posts.py -p -d all to get posts from this set of speakers from all years.
-3. Run merge_ts_posts.py to combine these files and output author_json files in all_posts.
-4. Run preprocess_all_posts.py to preprocess all_posts/author_json files.
-5. Run sentence_tokenize.py to run CoreNLP tokenizer on all posts.
+1. Put the speaker names for speakers of interest in `top_speakers`.
+2. Run `get_ts_posts.py -p -d all` to get posts from this set of speakers from all years.
+3. Run `merge_ts_posts.py` to combine these files and output author_json files in all_posts.
+4. Run `preprocess_all_posts.py` to preprocess all_posts/author_json files.
+5. Run `sentence_tokenize.py` to run CoreNLP tokenizer on all posts.
