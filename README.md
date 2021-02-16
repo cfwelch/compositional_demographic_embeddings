@@ -1,7 +1,7 @@
 Coming Soon!
 
 Working on cleaning and uploading code and instructions for:
-- [ ] Data processing
+- [X] Data processing
 - [ ] Attribute extraction
 - [ ] Embedding training
 - [ ] Model training
@@ -36,7 +36,7 @@ python find_self_statements.py --type religion
 python find_self_statements.py --type age
 ```
 
-After running this for location, you will have files for locations in the demographic folder. You can then run compose/resolve_locations.py to resolve locations to the following set, which was based on the amount of available data for each region:
+After running this for location, you will have files for locations in the demographic folder. You can then run `compose/resolve_locations.py` to resolve locations to the following set, which was based on the amount of available data for each region:
 1. USA
 2. Asia
 3. Oceania
@@ -48,8 +48,9 @@ After running this for location, you will have files for locations in the demogr
 9. Canada
 
 ### Preprocessing
-1. Put the speaker names for speakers of interest in `top_speakers`.
+1. Put the speaker names for speakers of interest in `top_speakers`. If you would like to run `find_bots_in_list.py` at this point, you can and it will output the names of speakers in your file that are known bots. At this point you can manually remove them if you'd like. A script to remove them can be run at step 6.
 2. Run `get_ts_posts.py -p -d all` to get posts from this set of speakers from all years.
 3. Run `merge_ts_posts.py` to combine these files and output author_json files in all_posts.
 4. Run `preprocess_all_posts.py` to preprocess all_posts/author_json files.
 5. Run `sentence_tokenize.py` to run CoreNLP tokenizer on all posts.
+6. Run `rm_known_bots.py` to remove files in all_posts belonging to known bots.
