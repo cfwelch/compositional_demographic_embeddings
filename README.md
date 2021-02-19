@@ -36,7 +36,7 @@ python find_self_statements.py --type religion
 python find_self_statements.py --type age
 ```
 
-After running this for location, you will have files for locations in the demographic folder. You can then run `compose/resolve_locations.py` to resolve locations to the following set, which was based on the amount of available data for each region:
+After running this for location, you will have files for locations in the demographic folder. You can then run `resolve_locations.py` from the `compose` folder to resolve locations to the following set, which was based on the amount of available data for each region:
 1. USA
 2. Asia
 3. Oceania
@@ -47,6 +47,12 @@ After running this for location, you will have files for locations in the demogr
 8. South America
 9. Canada
 
+Next, run `complete_authors.py --find`, which will create a `complete_authors` file in the `demographic` folder, which will be used in the creation of matrix embeddings. There are a few important constants in `complete_authors.py` at the top of the file that can be changed:
+* `MAX_AGE` and `MIN_AGE` are the range of accepted ages. If a user states that they are an age outside of this range, they will be excluded from the `complete_authors` list.
+* `MAX_RANGE` is the largest accepted difference in stated ages. This acts as a simple heuristic to exclude users with incorrect ages. For instance, if a user states they are 20 in 2002 and 30 in 2003, this would not be possible. Our data spans 9 years, so we default this value to 9.
+* `N_UNKS` is the criterion number of unknown demographic values that causes a user to be excluded. If you would like no users to be excluded, set this to the number of demographic variables plus one (4+1 for us). If you would like to exclude users who have no known demographic values, set this to the number of demographic variables (4 for us).
+* `MIN_PERCENT` is the exclusion criteria for users who state both gender identities recognized by this study. For the less often expressed value, if it exceeds the `MIN_PERCENT`, the user is excluded.
+
 ## Preprocessing
 1. Put the speaker names for speakers of interest in `top_speakers`. If you would like to run `find_bots_in_list.py` at this point, you can and it will output the names of speakers in your file that are known bots. At this point you can manually remove them if you'd like. A script to remove them can be run at step 6.
 2. Run `get_ts_posts.py -p -d all` to get posts from this set of speakers from all years.
@@ -56,8 +62,9 @@ After running this for location, you will have files for locations in the demogr
 6. Run `rm_known_bots.py` to remove files in all_posts belonging to known bots.
 
 ## Creating Demographic Matrix Embeddings
-1. The highest performing embeddings described in our paper use separate matricies for each demographic value and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). First, clone this repository `git clone git@github.com:dbamman/geoSGLM.git`.
-2. TODO: Change `run.sh` parameters...
+The highest performing embeddings described in our paper use separate matricies for each demographic value and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). I have compiled separate JAR files and included separate config files for each demographic scenario.
+1. First run `prepare_demographic_embed_data.py` to create the `java_ctx_embeds_reddit_demographic` file containing relevant data and the `reddit_vocab` file.
+2. In the embeddings folder, run the shell script for each demographic (`./run_VARIABLE.sh`) to generate embeddings.
 
 ## Creating User Matrix Embeddings
 1. TODO: Other paper...
@@ -71,3 +78,4 @@ After running this for location, you will have files for locations in the demogr
 ## Other Scripts
 * `token_counter.py` outputs a file called `token_counts` that contains counts of tokens from all speakers in your `top_speakers` file.
 * `lexicon_map.py` is used by `plot_cat_dist.py` to graph LIWC and ROGET word class distributions and requires the `LIWC_PATH` and `ROGET_PATH` to be set in `lexicon_map.py` lines 9-10
+* Running `complete_authors.py --plot` provides some useful plots of the demographic and post distributions of the dataset.
