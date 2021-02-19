@@ -2,8 +2,6 @@
 
 import operator, datetime, base36, json, sys, os, re
 
-from map_posts import get_post_id
-
 from tqdm import tqdm
 from collections import defaultdict
 from argparse import ArgumentParser
@@ -24,6 +22,7 @@ def main():
             tline = line.strip().split('\t')[0]
             top_speakers.append(tline)
 
+    all_posts = {ts: 0 for ts in top_speakers}
     for cur_dir in DIR_SET:
         # Reset for each directory so you can append instead of storing all in memory
         utt_sets = {ts: [] for ts in top_speakers}
@@ -44,9 +43,14 @@ def main():
         # Used to do this after reading all the files but required too much memory for complete_authors
         print('Writing speakers to files...')
         for speaker in utt_sets:
+            all_posts[speaker] += len(utt_sets[speaker])
             with open('all_posts/' + speaker + '_json', 'a') as handle:
                 for line in utt_sets[speaker]:
                     handle.write(json.dumps(line) + '\n')
+
+    with open('demographic/ppl_all', 'w') as handle:
+        for ts in all_posts:
+            handle.write(ts + '\t' + str(all_posts[ts]) + '\n')
 
 if __name__ == '__main__':
     main()

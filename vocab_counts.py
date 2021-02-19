@@ -5,8 +5,7 @@ import operator, json, os
 from collections import defaultdict
 from tqdm import tqdm
 
-from utils import top_reddits
-
+top_reddits = []
 SPLIT_TYPE = 'user'
 os.makedirs('vocabs/' + SPLIT_TYPE, exist_ok=True)
 

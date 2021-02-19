@@ -1,6 +1,6 @@
 
 
-import datetime, socket, time, html, pytz, re, os
+import datetime, socket, base36, time, html, pytz, re, os
 
 from termcolor import colored
 
@@ -35,8 +35,6 @@ SPTOK_SOS = '<SOS>'
 
 SPTOK_REPS = ['URL', 'REDDIT_USERNAME', 'SUBREDDIT_NAME']
 
-top_reddits = ['AskReddit', 'blog', 'politics', 'ExploreFiction', 'jerktalkdiamond', 'doublespeakprivilege', 'atheism', 'RatedRFiction', 'pics', 'reddit.com']
-
 def map_pos(inpos):
     outpos = inpos
     if inpos in ['NNP', 'NNS', 'NNPS', 'NN']:
@@ -70,6 +68,20 @@ with open(dir_path + '/pos_dist_out_above_95') as handle:
 POS_DSET = ['NN', 'JJ', 'RB', 'VB', 'PUNCT', 'PR', 'DT', 'FW', 'IN', 'OTHER']
 POS_LSET.sort()
 POS_DSET.sort()
+
+def get_post_id(idstr):
+    num_id = None
+    pid_parts = idstr.split('_')
+    if len(pid_parts) == 1:
+        #print(idstr)
+        num_id = base36.loads(pid_parts[0])
+    elif len(pid_parts) == 2:
+        # print(pid_parts[1])
+        num_id = base36.loads(pid_parts[1])
+    else:
+        print('Error: The parent ID \'' + idstr + '\' is not valid.')
+        sys.exit(1)
+    return num_id
 
 def text_clean(instr):
     outstr = instr.strip().lower()

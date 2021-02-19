@@ -2,7 +2,7 @@
 
 import operator, datetime, base36, json, sys, os, re
 
-from map_posts import get_post_id
+from utils import get_post_id
 
 from tqdm import tqdm
 from random import random
