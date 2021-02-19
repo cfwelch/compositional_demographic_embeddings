@@ -14,10 +14,16 @@ IDX_ORDER = ['age', 'gender', 'religion', 'location']
 RELIGION_VALUES = ['atheist', 'christian', 'muslim', 'buddhist', 'hindu']
 LOCATION_VALUES = ['usa', 'asia', 'oceania', 'uk', 'europe', 'africa', 'mexico', 'southam', 'canada']
 
-plt.rcParams['text.usetex'] = True
+# plt.rcParams['text.usetex'] = True
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.size'] = '20'
 # plt.rcParams['figure.facecolor'] = (0.7226, 0.8008, 0.8945)
+
+MAX_AGE = 100
+MIN_AGE = 13
+MAX_RANGE = 9
+MIN_PERCENT = 0.20
+N_UNKS = 3
 
 def main():
     parser = ArgumentParser()
@@ -91,7 +97,7 @@ def plot():
                     # if tuser['gender'] == 'male':
                     #     total_male += 1 
 
-            if nunks < 3 and nunks != 0:
+            if nunks < N_UNKS: # and nunks != 0
                 r_by_l[tuser['location']][tuser['religion']] += 1
                 g_by_l[tuser['location']][tuser['gender']] += 1
                 udict[tline[0]] = tuser
@@ -242,7 +248,6 @@ def find():
             udict[tline[0]]['gender'].append(tline[1])
 
     nums = []
-    MIN_PERCENT = 0.20
     num_smallp = 0
     num_both = 0
     print('\n\n')
@@ -294,9 +299,6 @@ def find():
 
     nums = []
     nums_t = []
-    MAX_AGE = 100
-    MIN_AGE = 13
-    MAX_RANGE = 9
     num_resolved = 0
     num_reasonable = 0
     num_broken = 0
@@ -345,8 +347,8 @@ def find():
             if udict[u][i] == 'UNK':
                 nunks += 1
 
-        # Filter people with less than 2 known variables -- 3 unknowns means only one known or none.
-        if nunks >= 3:
+        # Filter people with less than 5-N_UNKS known variables -- 3 unknowns means only one known or none.
+        if nunks >= N_UNKS:
             to_del.append(u)
     print('Number of users trimmed: ' + '{:,}'.format(len(to_del)))
     for u in to_del:

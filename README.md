@@ -1,17 +1,16 @@
-Coming Soon!
 
 Working on cleaning and uploading code and instructions for:
 - [X] Data processing
 - [X] Attribute extraction
-- [ ] Embedding training
-- [ ] Model training
-- [ ] Analysis
+- [X] Embedding training
+- [ ] Language model training
+- [ ] Code for individual users
 
 **Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder. These files contain fake authors with single letter names in `[a-z]`.
 
 ## Publication
 
-More details of experiments run with this code can be found in the [our paper](https://arxiv.org/abs/2010.02986).
+More details of experiments run with this code can be found in [our paper](https://arxiv.org/abs/2010.02986).
 
 If you use this code please cite:
 
@@ -21,6 +20,19 @@ If you use this code please cite:
     author  = {Charles Welch and Jonathan K. Kummerfeld and Ver{\'o}nica P{\'e}rez-Rosas and Rada Mihalcea},
     booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing},
     month = {November},
+    year = {2020},
+    location = {Online}
+}
+```
+
+This repository also contains code for our paper on personalized word embeddings for individual users. If you use the user-specific code please cite:
+
+```
+@InProceedings{coling20personal,
+    title   = {Exploring the Value of Personalized Word Embeddings},
+    author  = {Charles Welch and Jonathan K. Kummerfeld and Ver{\'o}nica P{\'e}rez-Rosas and Rada Mihalcea},
+    booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
+    month = {December},
     year = {2020},
     location = {Online}
 }
@@ -68,6 +80,9 @@ The highest performing embeddings described in our paper use separate matricies 
 
 ## Creating User Matrix Embeddings
 1. TODO: Other paper...
+
+## Running the Language Model
+The language model code we use is modified from [Merity et al's 2018 code](https://github.com/salesforce/awd-lstm-lm). The modifications allow loading of multiple pretrained embedding matrices with which to initialize the model and allows for freezing and untying embedding weights, as we found [this works well when there is enough in-domain data to pretrain on](https://github.com/jkkummerfeld/emnlp20lm).
 
 ## Create Word Category Plots
 1. Follow the steps for creating embeddings for users above. The scripts for plotting category distributions are not currently available for demographic embeddings.
