@@ -1,10 +1,5 @@
 
-Working on cleaning and uploading code and instructions for:
-- [X] Data processing
-- [X] Attribute extraction
-- [X] Embedding training
-- [ ] Language model training
-- [ ] Code for individual users
+This repository contains code for two publications. One relates to demographic embeddings and the other is about personalizing embeddings and language models for specific users. Code for demographic embeddings is complete and I am in the process of uploading additional scripts for running the experiments in our COLING paper with individual users.
 
 **Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder. These files contain fake authors with single letter names in `[a-z]`.
 
@@ -12,7 +7,7 @@ Working on cleaning and uploading code and instructions for:
 
 More details of experiments run with this code can be found in [our paper](https://arxiv.org/abs/2010.02986).
 
-If you use this code please cite:
+If you use this code for demographic embeddings please cite:
 
 ```
 @InProceedings{emnlp20compositional,
@@ -25,7 +20,7 @@ If you use this code please cite:
 }
 ```
 
-This repository also contains code for our paper on personalized word embeddings for individual users. If you use the user-specific code please cite:
+If you use this code for personalized word embeddings for individual users please cite:
 
 ```
 @InProceedings{coling20personal,
