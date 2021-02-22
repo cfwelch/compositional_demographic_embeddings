@@ -1,4 +1,6 @@
 
+# Personalized and Demographic Word Embeddings
+
 This repository contains code for two publications. One relates to demographic embeddings and the other is about personalizing embeddings and language models for specific users. Code for demographic embeddings is complete and I am in the process of uploading additional scripts for running the experiments in our COLING paper with individual users.
 
 **Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder. These files contain fake authors with single letter names in `[a-z]`.
@@ -68,13 +70,16 @@ Next, run `complete_authors.py --find`, which will create a `complete_authors` f
 5. Run `sentence_tokenize.py` to run CoreNLP tokenizer on all posts.
 6. Run `rm_known_bots.py` to remove files in all_posts belonging to known bots.
 
-## Creating Demographic Matrix Embeddings
-The highest performing embeddings described in our paper use separate matricies for each demographic value and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). I have compiled separate JAR files and included separate config files for each demographic scenario. **Note**: If you plan to also run the language model, make sure to separate out a sample of data for training the model.
+## Creating Matrix Embeddings
+The highest performing embeddings described in our papers use separate matricies for each demographic value or user and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). I have compiled separate JAR files and included separate config files for each demographic scenario. **Note**: If you plan to also run the language model, make sure to first separate out a sample of data for training the model.
+
+### Demographic Embeddings
 1. First run `prepare_demographic_embed_data.py` to create the `java_ctx_embeds_reddit_demographic` file containing relevant data and the `reddit_vocab` file.
 2. In the embeddings folder, run the shell script for each demographic (`./run_VARIABLE.sh`) to generate embeddings.
 
-## Creating User Matrix Embeddings
-1. TODO: Other paper...
+### User Embeddings
+1. First run `prepare_author_embed_data.py` to create the `sts_combined_users` file containing text with user labels for training embeddings and a `reddit_user_vocab` file.
+2. In the embeddings folder, run the shell script `./run_users.sh` to generate embeddings.
 
 ## Running the Language Model
 The language model code we use is modified from [Merity et al's 2018 code](https://github.com/salesforce/awd-lstm-lm). The modifications allow loading of multiple pretrained embedding matrices with which to initialize the model and allows for freezing and untying embedding weights, as we found [this works well when there is enough in-domain data to pretrain on](https://github.com/jkkummerfeld/emnlp20lm).
