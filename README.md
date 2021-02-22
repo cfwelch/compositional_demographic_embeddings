@@ -74,7 +74,7 @@ Next, run `complete_authors.py --find`, which will create a `complete_authors` f
 6. Run `rm_known_bots.py` to remove files in all_posts belonging to known bots.
 
 ## Creating Demographic Matrix Embeddings
-The highest performing embeddings described in our paper use separate matricies for each demographic value and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). I have compiled separate JAR files and included separate config files for each demographic scenario.
+The highest performing embeddings described in our paper use separate matricies for each demographic value and are learned using [Bamman et al.'s 2014 code](https://github.com/dbamman/geoSGLM). I have compiled separate JAR files and included separate config files for each demographic scenario. **Note**: If you plan to also run the language model, make sure to separate out a sample of data for training the model.
 1. First run `prepare_demographic_embed_data.py` to create the `java_ctx_embeds_reddit_demographic` file containing relevant data and the `reddit_vocab` file.
 2. In the embeddings folder, run the shell script for each demographic (`./run_VARIABLE.sh`) to generate embeddings.
 
@@ -83,6 +83,15 @@ The highest performing embeddings described in our paper use separate matricies 
 
 ## Running the Language Model
 The language model code we use is modified from [Merity et al's 2018 code](https://github.com/salesforce/awd-lstm-lm). The modifications allow loading of multiple pretrained embedding matrices with which to initialize the model and allows for freezing and untying embedding weights, as we found [this works well when there is enough in-domain data to pretrain on](https://github.com/jkkummerfeld/emnlp20lm).
+
+To run with all demographic embeddings use `python main.py --batch_size 20 --data /path/to/data --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 50 --save reddit_demo.pt --usepre --pre /path/to/demo/embeds/embeddings.without.suffix. --emsize 100 --burnin 99 --demouse cat --usedemo`
+* `data` is a path to a folder with a `train.txt`, `valid.txt`, and `test.txt` in the format used by JARs above to create embeddings.
+* `pre` is the folder containing pretrained embeddings. The file format must have age, gender, location, or religion as the end of the filename and the parameter when running should omit this (e.g. our scripts create embeddings in this repo with the prefix `embed_test_` so this would be what would be passed).
+* `burnin` determines how many epochs for which embeddings will not be updated. Here, since it is larger than the number of epochs, they will be frozen the whole time.
+* `usedemo` is a flag that tells the model to use demographic embeddings.
+* `demouse` can be `cat` or `sum` and determines whether to concatenate or add demographic embeddings.
+* If you would like to use one demographic instead of all, you can use `useone` and specify which demographic to use.
+* If you have a second test set to evaluate on, use `test` to specify the name of the second file relative to the folder specified by `data`.
 
 ## Create Word Category Plots
 1. Follow the steps for creating embeddings for users above. The scripts for plotting category distributions are not currently available for demographic embeddings.
