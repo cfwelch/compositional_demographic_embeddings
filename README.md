@@ -1,7 +1,7 @@
 
 # Personalized and Demographic Word Embeddings
 
-This repository contains code for two publications. One relates to demographic embeddings and the other is about personalizing embeddings and language models for specific users. Code for demographic embeddings is complete and I am in the process of uploading additional scripts for running the experiments in our COLING paper with individual users.
+This repository contains code for two publications. One relates to demographic embeddings and the other is about personalizing embeddings and language models for specific users.
 
 **Note**: We were not able to share data directly due to licensing issues. However, the data we downloaded is available [here](https://www.reddit.com/r/datasets/comments/3bxlg7/i_have_every_publicly_available_reddit_comment/) and we have scripts to perform the extraction the same way as described in our paper. This repository contains generated JSON files containing fake data that the scripts can be tested on in the 'data' folder. These files contain fake authors with single letter names in `[a-z]`.
 
@@ -82,7 +82,9 @@ The highest performing embeddings described in our papers use separate matricies
 2. In the embeddings folder, run the shell script `./run_users.sh` to generate embeddings.
 
 ## Running the Language Model
-The language model code we use is modified from [Merity et al's 2018 code](https://github.com/salesforce/awd-lstm-lm). The modifications allow loading of multiple pretrained embedding matrices with which to initialize the model and allows for freezing and untying embedding weights, as we found [this works well when there is enough in-domain data to pretrain on](https://github.com/jkkummerfeld/emnlp20lm).
+The language model code we use is modified from [Merity et al's 2018 code](https://github.com/salesforce/awd-lstm-lm) and is in the `awd_lstm` directory. The modifications allow loading of multiple pretrained embedding matrices with which to initialize the model and allows for freezing and untying embedding weights, as we found [this works well when there is enough in-domain data to pretrain on](https://github.com/jkkummerfeld/emnlp20lm).
+
+### Demographic Language Model
 
 To run with all demographic embeddings use `python main.py --batch_size 20 --data /path/to/data --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 50 --save reddit_demo.pt --usepre --pre /path/to/demo/embeds/embeddings.without.suffix. --emsize 100 --burnin 99 --demouse cat --usedemo`
 * `data` is a path to a folder with a `train.txt`, `valid.txt`, and `test.txt` in the format used by JARs above to create embeddings.
@@ -92,6 +94,11 @@ To run with all demographic embeddings use `python main.py --batch_size 20 --dat
 * `demouse` can be `cat` or `sum` and determines whether to concatenate or add demographic embeddings.
 * If you would like to use one demographic instead of all, you can use `useone` and specify which demographic to use.
 * If you have a second test set to evaluate on, use `test` to specify the name of the second file relative to the folder specified by `data`.
+
+### User Language Model
+
+1. First prepare the data by running `prepare_aa_data.py` which will create a separate `aa.txt` evaluation file for each user, in addition to the train/validation/test split for training language models.
+2. TODO about LM code that is different from the demographic LM code?
 
 ## Create Word Category Plots
 1. Follow the steps for creating embeddings for users above. The scripts for plotting category distributions are not currently available for demographic embeddings.
