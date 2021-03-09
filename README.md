@@ -7,7 +7,7 @@ This repository contains code for two publications. One relates to demographic e
 
 ## Publication
 
-More details of experiments run with this code can be found in [our paper](https://arxiv.org/abs/2010.02986).
+More details of experiments run with this code can be found in our papers on [demographic](https://arxiv.org/abs/2010.02986) and [personalized](https://arxiv.org/abs/2011.06057) embeddings.
 
 If you use this code for demographic embeddings please cite:
 
