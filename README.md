@@ -97,14 +97,16 @@ To run with all demographic embeddings use `python main.py --batch_size 20 --dat
 
 ### User Language Model
 
-1. First prepare the data by running `prepare_aa_data.py` which will create a separate `aa.txt` evaluation file for each user, in addition to the train/validation/test split for training language models.
-2. TODO about LM code that is different from the demographic LM code?
+1. First prepare the data by running `prepare_aa_data.py` which will create a separate `aa.txt` evaluation file for each user, in addition to the train/validation/test split for training language models. The code for user models is similar to the code for the demographic language model.
+2. To create a model for a single user you will use code in the `single_user` folder and can run `python main.py --batch_size 20 --data /path/to/data/aa/ --dropouti 0.4 --dropouth 0.25 --seed 141 --epoch 50 --save /path/to/output/models/ --nhid 550 --pre /path/to/user/embedding/matrices/ --emsize 100 --usepre --burnin 99 --induse cat --name $uname --aaeval --useind`
+* `name` is the name of the user for which the model is being created.
+* `aaeval` will run the user's model on each other user's data and produce output files with perplexities that can be used later to determine which model had the best predictions.
 
 ## Create Word Category Plots
 1. Follow the steps for creating embeddings for users above. The scripts for plotting category distributions are not currently available for demographic embeddings.
 2. Run `vocab_counts.py` to get word frequencies per user.
 3. Run `compare_spaces.py` to get word distances to generic embedding space per user.
-4. Run `plot_cats_dist.py` to generate the graphs. Options are available for POS tags, LIWC, and ROGET categories. Figures can be saved or displayed with additional options, see `--help` for more details. (TODO test this)
+4. Run `plot_cats_dist.py` to generate the graphs. Options are available for POS tags, LIWC, and ROGET categories. Figures can be saved or displayed with additional options, see `--help` for more details.
 
 ## Other Scripts
 * `token_counter.py` outputs a file called `token_counts` that contains counts of tokens from all speakers in your `top_speakers` file.
