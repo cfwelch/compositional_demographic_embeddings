@@ -21,6 +21,7 @@ def main():
         for line in handle:
             tline = line.strip().split('\t')[0]
             top_speakers.append(tline)
+    top_speakers = set(top_speakers)
 
     all_posts = {ts: 0 for ts in top_speakers}
     for cur_dir in DIR_SET:
